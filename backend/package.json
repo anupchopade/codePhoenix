@@ -1,17 +1,28 @@
 {
+<<<<<<< HEAD
   "name": "codephoenix-backend",
   "version": "1.0.0",
   "description": "Backend for CodePhoenix - Code Modernization Service",
+=======
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Code modernization backend service",
+>>>>>>> d61095b592847ba111013a76844d9cbc0909f886
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
+<<<<<<< HEAD
     "test": "echo \"Error: no test specified\" && exit 1"
+=======
+    "test": "jest"
+>>>>>>> d61095b592847ba111013a76844d9cbc0909f886
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "@babel/core": "^7.x",
     "@babel/plugin-transform-arrow-functions": "^7.25.9",
     "@babel/plugin-transform-block-scoping": "^7.25.9",
@@ -27,5 +38,14 @@
   },
   "devDependencies": {
     "nodemon": "^2.x"
+=======
+    "@babel/generator": "^7.23.6",
+    "@babel/parser": "^7.23.6",
+    "@babel/traverse": "^7.23.6",
+    "@babel/types": "^7.23.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+>>>>>>> d61095b592847ba111013a76844d9cbc0909f886
   }
 }
