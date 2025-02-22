@@ -26,18 +26,25 @@ app.post("/api/modernize", async (req, res) => {
   }
 
   try {
-    let modernized;
+    let result;
     if (language === "javascript") {
-      modernized = await refactorJs(code);
+      result = await refactorJs(code);
     } else if (language === "python") {
-      modernized = await refactorPython(code);
+      result = await refactorPython(code);
     } else {
       return res.status(400).json({
         error:
           "Unsupported language. Supported languages are: javascript, python",
       });
     }
-    res.json({ original: code, modernized });
+
+    res.json({
+      original: code,
+      modernized: result.modernizedCode,
+      changes: result.changes,
+      diff: result.diff,
+      refactoringDetails: result.refactoringDetails,
+    });
   } catch (error) {
     console.error("Modernization error:", error);
     res.status(500).json({

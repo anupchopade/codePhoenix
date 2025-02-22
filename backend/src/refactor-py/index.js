@@ -2,6 +2,7 @@ const { exec } = require("child_process");
 const fs = require("fs").promises;
 const path = require("path");
 const os = require("os");
+const { diffLines } = require("diff");
 
 async function refactorPython(code) {
   // Create a temporary directory for our files
@@ -14,17 +15,28 @@ async function refactorPython(code) {
     await fs.writeFile(inputFile, code, "utf8");
 
     // Run 2to3 on the file
-    await new Promise((resolve, reject) => {
+    const changes = await new Promise((resolve, reject) => {
       const command =
         process.platform === "win32"
-          ? `python -m lib2to3 -w "${inputFile}"`
-          : `2to3 -w "${inputFile}"`;
+          ? `python -m lib2to3 -w "${inputFile}" 2>&1`
+          : `2to3 -w "${inputFile}" 2>&1`;
 
       exec(command, (error, stdout, stderr) => {
-        if (error && !stderr.includes("RefactoringTool: Writing")) {
-          reject(new Error(`2to3 failed: ${stderr || error.message}`));
+        // 2to3 outputs its changes to stderr
+        const output = stderr || stdout;
+        if (error && !output.includes("RefactoringTool: Writing")) {
+          reject(new Error(`2to3 failed: ${output || error.message}`));
         } else {
-          resolve(stdout);
+          // Parse the changes from 2to3 output
+          const changesList = output
+            .split("\n")
+            .filter(
+              (line) =>
+                line.includes("RefactoringTool:") && !line.includes("Writing")
+            )
+            .map((line) => line.replace("RefactoringTool: ", ""))
+            .filter(Boolean);
+          resolve(changesList);
         }
       });
     });
@@ -32,10 +44,29 @@ async function refactorPython(code) {
     // Read the modernized code
     const modernized = await fs.readFile(inputFile, "utf8");
 
+    // Generate diff between original and modernized code
+    const diffResult = diffLines(code, modernized);
+    const diff = diffResult
+      .map((part) => ({
+        value: part.value.trim(),
+        added: part.added || false,
+        removed: part.removed || false,
+      }))
+      .filter((part) => part.value.length > 0);
+
     // Clean up
     await fs.rm(tempDir, { recursive: true, force: true });
 
-    return modernized;
+    return {
+      modernizedCode: modernized,
+      changes: changes,
+      diff: diff,
+      refactoringDetails: {
+        tool: "2to3",
+        pythonVersion: "3.x",
+        transformations: changes.length,
+      },
+    };
   } catch (error) {
     // Clean up on error
     try {
