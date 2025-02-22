@@ -1,156 +1,13 @@
-<<<<<<< HEAD
-const babel = require('@babel/core');
-const Queue = require('bull');
-
-// Redis configuration
-const redisConfig = {
-  redis: {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379,
-    password: process.env.REDIS_PASSWORD
-  }
-};
-
-// Create refactor queue
-const refactorQueue = new Queue('js-refactor-queue', redisConfig);
-
-// Configure queue processing
-refactorQueue.process(10, async (job) => {
-  const { code } = job.data;
-  try {
-    const refactoredCode = await transformCode(code);
-    return { success: true, code: refactoredCode };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-});
-
-const formatCode = (code) => {
-  const lines = code.split('\n');
-  let indent = 0;
-  const formattedLines = lines.map(line => {
-    line = line.trim();
-    if (line.includes('}')) indent -= 2;
-    const formatted = ' '.repeat(indent) + line;
-    if (line.includes('{')) indent += 2;
-    return formatted;
-  });
-  return formattedLines.join('\n');
-};
-
-// Code transformation function
-const transformCode = async (code) => {
-  try {
-    // First pass: Basic ES6 transformations using Babel
-    const refactored = babel.transformSync(code, {
-      presets: [
-        ['@babel/preset-env', {
-          targets: { node: 'current' },
-          modules: false,
-          loose: true
-        }]
-      ],
-      plugins: [
-        '@babel/plugin-transform-block-scoping',
-        '@babel/plugin-transform-template-literals',
-        '@babel/plugin-transform-arrow-functions',
-        '@babel/plugin-transform-shorthand-properties',
-        '@babel/plugin-transform-parameters'
-      ],
-      comments: false,
-      retainLines: true,
-      sourceMaps: false,
-      generatorOpts: {
-        retainLines: true,
-        comments: false,
-        compact: false,
-        minified: false,
-        quotes: 'single'
-      }
-    });
-    
-    let transformedCode = refactored.code
-      .replace('"use strict";\n\n', '')
-      .replace(/\n\n+/g, '\n')
-      .trim();
-
-    // Second pass: Additional ES6 transformations using regex
-    
-    // Convert var to const
-    transformedCode = transformedCode
-      .replace(/var\s+([a-zA-Z_$][0-9a-zA-Z_$]*)\s*=/g, 'const $1 =');
-
-    // Convert string concatenation to template literals (improved version)
-    transformedCode = transformedCode
-      .replace(/(['"])(.*?)\1\s*\+\s*([a-zA-Z_$][0-9a-zA-Z_$]*(?:\.[a-zA-Z_$][0-9a-zA-Z_$]*)*)\s*(?:\+\s*(['"])(.*?)\4)?/g, 
-        (match, q1, str1, expr, q2, str2) => {
-          if (str2) {
-            return `\`${str1}\${${expr}}${str2}\``;
-          }
-          return `\`${str1}\${${expr}}\``;
-        });
-
-    // Convert object method syntax (improved version)
-    transformedCode = transformedCode
-      .replace(/(\w+):\s*function\s*\(/g, '$1(')
-      .replace(/{\s*return\s+([^;]+);\s*}/g, '{ return $1; }');
-
-    // Convert standalone functions to arrow functions (when appropriate)
-    transformedCode = transformedCode
-      .replace(/function\s+([a-zA-Z_$][0-9a-zA-Z_$]*)\s*\(([^)]*)\)\s*{\s*return\s+([^;]+);\s*}/g,
-        (match, name, params, body) => {
-          // Don't convert methods that use 'this'
-          if (body.includes('this')) {
-            return match;
-          }
-          return `const ${name} = (${params}) => ${body}`;
-        });
-
-    // Handle rest parameters
-    transformedCode = transformedCode
-      .replace(/\(([^)]*)\)\s*{([^}]*)arguments\.length\s*>\s*1\s*\?\s*arguments\[1\]\s*:\s*{([^}]*)}/g,
-        (match, params, before, after) => {
-          const newParams = params.trim() ? `${params}, ...rest` : '...rest';
-          return `(${newParams}) {${before}rest${after}}`;
-        });
-
-    // Apply proper formatting
-    transformedCode = formatCode(transformedCode);
-
-    return transformedCode;
-  } catch (error) {
-    throw new Error(`Refactoring failed: ${error.message}`);
-  }
-};
-
-// Main refactoring function that will be exported
-const refactorJs = async (code) => {
-  try {
-    const job = await refactorQueue.add({ code });
-    const result = await job.finished();
-    
-    if (result.success) {
-      return result.code;
-    } else {
-      throw new Error(result.error);
-    }
-  } catch (error) {
-    throw new Error(`JS Refactoring failed: ${error.message}`);
-  }
-};
-
-module.exports = {
-  refactorJs,
-  refactorQueue
-};
-=======
 const { parse } = require("@babel/parser");
 const generate = require("@babel/generator").default;
 const traverse = require("@babel/traverse").default;
 const t = require("@babel/types");
+const { diffLines } = require("diff");
 
 async function refactorJs(code) {
   try {
+    const changes = [];
+
     // Parse the code into an AST
     const ast = parse(code, {
       sourceType: "module",
@@ -162,12 +19,22 @@ async function refactorJs(code) {
       // Convert var to let/const
       VariableDeclaration(path) {
         if (path.node.kind === "var") {
+          const oldCode = generate(path.node).code;
           path.node.kind = "const";
+          const newCode = generate(path.node).code;
+          changes.push({
+            type: "VariableDeclaration",
+            description: "Converted 'var' to 'const'",
+            location: path.node.loc,
+            oldCode,
+            newCode,
+          });
         }
       },
-      // Convert function declarations to arrow functions where appropriate
+      // Convert function declarations to arrow functions
       FunctionDeclaration(path) {
         if (!path.node.generator && !path.node.async) {
+          const oldCode = generate(path.node).code;
           const arrowFunction = t.arrowFunctionExpression(
             path.node.params,
             path.node.body
@@ -179,17 +46,104 @@ async function refactorJs(code) {
             ),
           ]);
           path.replaceWith(variableDeclaration);
+          const newCode = generate(variableDeclaration).code;
+          changes.push({
+            type: "FunctionDeclaration",
+            description: "Converted function declaration to arrow function",
+            location: path.node.loc,
+            oldCode,
+            newCode,
+          });
+        }
+      },
+      // Convert string concatenation to template literals
+      BinaryExpression(path) {
+        if (
+          path.node.operator === "+" &&
+          (t.isStringLiteral(path.node.left) ||
+            t.isStringLiteral(path.node.right))
+        ) {
+          const oldCode = generate(path.node).code;
+
+          // Collect all parts of the concatenation
+          const parts = [];
+          let current = path.node;
+          while (t.isBinaryExpression(current) && current.operator === "+") {
+            parts.unshift(current.right);
+            current = current.left;
+          }
+          parts.unshift(current);
+
+          // Create template elements and expressions
+          const quasis = [];
+          const expressions = [];
+          let templateString = "";
+
+          parts.forEach((part, index) => {
+            if (t.isStringLiteral(part)) {
+              templateString += part.value;
+            } else {
+              expressions.push(part);
+              quasis.push(
+                t.templateElement(
+                  { raw: templateString, cooked: templateString },
+                  false
+                )
+              );
+              templateString = "";
+            }
+          });
+
+          // Add the final quasi
+          quasis.push(
+            t.templateElement(
+              { raw: templateString, cooked: templateString },
+              true
+            )
+          );
+
+          const template = t.templateLiteral(quasis, expressions);
+          path.replaceWith(template);
+
+          const newCode = generate(template).code;
+          changes.push({
+            type: "StringConcatenation",
+            description: "Converted string concatenation to template literal",
+            location: path.node.loc,
+            oldCode,
+            newCode,
+          });
         }
       },
     });
 
     // Generate the modernized code
     const output = generate(ast, {}, code);
-    return output.code;
+    const modernized = output.code;
+
+    // Generate diff between original and modernized code
+    const diffResult = diffLines(code, modernized);
+    const diff = diffResult
+      .map((part) => ({
+        value: part.value.trim(),
+        added: part.added || false,
+        removed: part.removed || false,
+      }))
+      .filter((part) => part.value.length > 0);
+
+    return {
+      modernizedCode: modernized,
+      changes: changes,
+      diff: diff,
+      refactoringDetails: {
+        tool: "Babel",
+        transformations: changes.length,
+        transformationTypes: [...new Set(changes.map((c) => c.type))],
+      },
+    };
   } catch (error) {
     throw new Error(`Failed to refactor JavaScript: ${error.message}`);
   }
 }
 
 module.exports = { refactorJs };
->>>>>>> d61095b592847ba111013a76844d9cbc0909f886
