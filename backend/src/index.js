@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { refactorJs } = require("./refactor-js/index.js");
 const { refactorPython } = require("./refactor-py/index.js");
+const { correctJavaScript, correctPython } = require("./code-corrector/index.js");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -49,6 +50,45 @@ app.post("/api/modernize", async (req, res) => {
     console.error("Modernization error:", error);
     res.status(500).json({
       error: "Failed to modernize code",
+      details: error.message,
+    });
+  }
+});
+
+// Code correction endpoint
+app.post("/api/correct", async (req, res) => {
+  const { code, language } = req.body;
+
+  if (!code || !language) {
+    return res.status(400).json({
+      error: "Missing required fields: code and language are required",
+    });
+  }
+
+  try {
+    let result;
+    if (language === "javascript") {
+      result = await correctJavaScript(code);
+      console.log('JavaScript correction result:', result);
+    } else if (language === "python") {
+      result = await correctPython(code);
+    } else {
+      return res.status(400).json({
+        error: "Unsupported language. Supported languages are: javascript, python",
+      });
+    }
+
+    if (result.error) {
+      return res.status(500).json({
+        error: result.error
+      });
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error("Correction error:", error);
+    res.status(500).json({
+      error: "Failed to correct code",
       details: error.message,
     });
   }
