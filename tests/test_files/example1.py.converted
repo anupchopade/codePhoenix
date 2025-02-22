@@ -1,0 +1,18 @@
+# Python 2 example code
+print("Hello, World!")
+print("Multiple", "arguments", "here")
+print("Error message", file=sys.stderr)
+
+# Division example
+result = 10 / 3
+print("Result:", result)
+
+# Exception handling
+try:
+    raise Exception("Test error")
+except Exception as e:
+    print(e)
+
+# Unicode example
+unicode_str = "Hello, Unicode!"
+print(unicode_str) 

@@ -1,0 +1,31 @@
+{
+  "name": "codephoenix-backend",
+  "version": "1.0.0",
+  "description": "Backend for CodePhoenix - Code Modernization Service",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.x",
+    "@babel/plugin-transform-arrow-functions": "^7.25.9",
+    "@babel/plugin-transform-block-scoping": "^7.25.9",
+    "@babel/plugin-transform-parameters": "^7.25.9",
+    "@babel/plugin-transform-shorthand-properties": "^7.25.9",
+    "@babel/plugin-transform-template-literals": "^7.26.8",
+    "@babel/preset-env": "^7.x",
+    "bull": "^4.x",
+    "cors": "^2.x",
+    "dotenv": "^16.x",
+    "express": "^4.x",
+    "redis": "^4.x"
+  },
+  "devDependencies": {
+    "nodemon": "^2.x"
+  }
+}
