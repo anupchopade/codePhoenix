@@ -33,12 +33,32 @@
   z-index: 1;
 }
 
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(112, 0, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 61, 0, 0.2);
+  }
+}
+
+@keyframes float-icon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .feature-card {
   text-align: center;
   position: relative;
   z-index: 1;
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   overflow: hidden;
+  animation: pulse-glow 4s ease-in-out infinite;
+  cursor: pointer;
 }
 
 .feature-content {
@@ -47,10 +67,18 @@
   border-radius: 24px;
   height: 100%;
   backdrop-filter: blur(10px);
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .feature-card:hover {
-  transform: translateY(-10px);
+  transform: translateY(-10px) scale(1.02);
+}
+
+.feature-card:hover .feature-content {
+  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .feature-card::after {
@@ -84,6 +112,14 @@
   border-radius: 30px;
   margin: 0 auto 2rem;
   position: relative;
+  animation: float-icon 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1) translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .feature-icon::before {
@@ -111,6 +147,7 @@
 }
 
 .feature-button {
+  margin-top: 2rem;
   background: transparent;
   border: 1px solid var(--accent-color, var(--primary-color));
   color: var(--accent-color, var(--primary-color));
@@ -138,6 +175,7 @@
 
 .feature-button:hover {
   color: white;
+  border-color: transparent;
 }
 
 .feature-button:hover::before {

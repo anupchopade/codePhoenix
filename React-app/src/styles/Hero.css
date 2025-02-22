@@ -79,6 +79,13 @@
   cursor: pointer;
   transform-style: preserve-3d;
   will-change: transform;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  transition: all 0.5s ease;
+}
+
+.code-window.modern {
+  transform: translateY(-20px);
 }
 
 .code-content {
@@ -87,21 +94,23 @@
   border-radius: 24px;
   height: 100%;
   backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.code-window.modern {
-  transform: translateY(-20px);
-}
-
-.code-window.modern .code-content {
-  background: rgba(0, 0, 0, 0.3);
+.code-window:hover .code-content {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .window-controls {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  transform: translateZ(20px);
+  transform-style: preserve-3d;
+  position: relative;
+  z-index: 2;
 }
 
 .window-controls span {
@@ -125,7 +134,8 @@
   background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   overflow-x: auto;
-  transform: translateZ(20px);
+  position: relative;
+  z-index: 2;
 }
 
 .code-window code {

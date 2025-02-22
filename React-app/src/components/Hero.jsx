@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Hero.css';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
-const Hero = () => {
+function Hero() {
+  const navigate = useNavigate();
   const [tiltStyle, setTiltStyle] = useState({});
   const [tiltStyleModern, setTiltStyleModern] = useState({});
   const [titleRef, titleVisible] = useScrollAnimation(0.1);
@@ -15,15 +17,18 @@ const Hero = () => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    // Calculate percentage position
+    const xPercent = (x / rect.width) * 100;
+    const yPercent = (y / rect.height) * 100;
     
-    const rotateX = ((y - centerY) / centerY) * 10;
-    const rotateY = ((centerX - x) / centerX) * 10;
+    // Calculate tilt angles (reversed for natural feel)
+    const rotateY = ((xPercent - 50) / 50) * 10; // Max 10 degrees
+    const rotateX = -((yPercent - 50) / 50) * 10; // Max 10 degrees
 
     const style = {
-      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`,
-      transition: 'transform 0.1s ease'
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`,
+      transition: 'none',
+      boxShadow: `${rotateY/2}px ${-rotateX/2}px 30px rgba(112, 0, 255, 0.15)`
     };
 
     if (isModern) {
@@ -35,14 +40,22 @@ const Hero = () => {
 
   const handleMouseLeave = (isModern) => {
     const style = {
-      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)',
-      transition: 'transform 0.5s ease'
+      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)',
+      transition: 'all 0.5s ease',
+      boxShadow: 'none'
     };
 
     if (isModern) {
       setTiltStyleModern(style);
     } else {
       setTiltStyle(style);
+    }
+  };
+
+  const handleGetStarted = () => {
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -67,7 +80,7 @@ const Hero = () => {
             Transform legacy code into modern, efficient syntax with our intelligent refactoring tools
           </p>
           <div className="hero-buttons">
-            <button className="primary-button">Get Started</button>
+            <button className="primary-button" onClick={handleGetStarted}>Start Refactoring</button>
             <button className="secondary-button">Learn More</button>
           </div>
         </div>
@@ -131,6 +144,6 @@ const calculateSum = (arr) => {
       </div>
     </section>
   );
-};
+}
 
 export default Hero; 

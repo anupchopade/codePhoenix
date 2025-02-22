@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Features.css';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const Features = () => {
+  const navigate = useNavigate();
   const [titleRef, titleVisible] = useScrollAnimation(0.1);
 
   const handleMouseMove = (e) => {
@@ -20,19 +22,21 @@ const Features = () => {
       title: 'JavaScript Refactoring',
       description: 'Convert ES5 to modern ES6+ syntax, including arrow functions, destructuring, and modern array methods',
       icon: '⚡',
-      color: '#FFD700'
+      color: '#FFD700',
+      path: '/javascript'
     },
     {
       id: 2,
       title: 'Python Modernization',
       description: 'Update Python 2.x code to Python 3.x, implementing modern best practices and syntax improvements',
       icon: '🐍',
-      color: '#4B8BBE'
+      color: '#4B8BBE',
+      path: '/python'
     }
   ];
 
   return (
-    <section className="features">
+    <section id="features" className="features">
       <h2 
         ref={titleRef}
         className={`features-title fade-in-up ${titleVisible ? 'visible' : ''}`}
@@ -52,6 +56,7 @@ const Features = () => {
                 transitionDelay: `${0.2 + index * 0.1}s`
               }}
               onMouseMove={handleMouseMove}
+              onClick={() => navigate(feature.path)}
             >
               <div className="feature-content">
                 <div className="feature-icon">{feature.icon}</div>
