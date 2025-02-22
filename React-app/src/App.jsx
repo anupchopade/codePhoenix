@@ -5,6 +5,7 @@ import "./App.css";
 import Hero from "./components/Hero";
 import Features from "./components/Features";
 import Steps from "./components/Steps";
+import Navbar from "./components/Navbar";
 import JavaScriptRefactor from "./pages/JavaScriptRefactor";
 import PythonRefactor from "./pages/PythonRefactor";
 
@@ -12,6 +13,7 @@ function App() {
   return (
     <Router>
       <div className="app">
+        <Navbar />
         <Routes>
           <Route
             path="/"
