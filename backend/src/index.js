@@ -56,7 +56,7 @@ app.post("/api/modernize", async (req, res) => {
 });
 
 // Code correction endpoint
-app.post("/api/correct", async (req, res) => {
+app.post("/api/correct", async (req, res) => {  
   const { code, language } = req.body;
 
   if (!code || !language) {

@@ -8,6 +8,7 @@ import Steps from "./components/Steps";
 import Navbar from "./components/Navbar";
 import JavaScriptRefactor from "./pages/JavaScriptRefactor";
 import PythonRefactor from "./pages/PythonRefactor";
+import CodeCorrector from "./components/CodeCorrector";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           />
           <Route path="/javascript" element={<JavaScriptRefactor />} />
           <Route path="/python" element={<PythonRefactor />} />
+          <Route path="/code-corrector" element={<CodeCorrector />} />
         </Routes>
       </div>
       <ToastContainer

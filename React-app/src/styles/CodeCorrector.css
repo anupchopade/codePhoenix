@@ -1,0 +1,226 @@
+.code-corrector-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--refactor-background);
+  position: relative;
+  width: 100%;
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.code-corrector-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(112, 0, 255, 0.2) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(255, 61, 0, 0.15) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(112, 0, 255, 0.15) 0%,
+      transparent 70%
+    );
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(120px);
+}
+
+.corrector-title {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 3rem auto 2.5rem;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.language-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  z-index: 1;
+}
+
+.language-btn {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+.language-btn.active {
+  background: var(--refactor-gradient);
+  border-color: transparent;
+  color: white;
+}
+
+.language-btn:hover:not(.active) {
+  background: rgba(112, 0, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.code-container {
+  display: flex;
+  width: 95%;
+  max-width: 1800px;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  gap: 2rem;
+  padding: 0;
+  margin: 0 auto 2rem;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.code-section {
+  flex: 1;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.code-editor {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 1rem;
+  resize: none;
+  outline: none;
+}
+
+.code-editor::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.corrections-summary {
+  width: 95%;
+  max-width: 1800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  z-index: 1;
+  position: relative;
+}
+
+.corrections-summary h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.corrections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.correction-item {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.correction-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.correction-value {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.correction-value.active {
+  background: rgba(39, 201, 63, 0.15);
+  color: #27c93f;
+}
+
+.correction-item.warnings {
+  grid-column: 1 / -1;
+}
+
+.issues-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.issues-list li {
+  color: #ff5f56;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.issues-list li:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .code-container {
+    flex-direction: column;
+  }
+
+  .code-section {
+    height: 400px;
+  }
+
+  .corrections-summary {
+    padding: 1.5rem;
+  }
+
+  .corrections-grid {
+    grid-template-columns: 1fr;
+  }
+} 
