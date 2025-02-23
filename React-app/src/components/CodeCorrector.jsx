@@ -1,43 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import { IconButton, Tooltip } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import CodeMirror from "@uiw/react-codemirror";
-import { javascript } from "@codemirror/lang-javascript";
-import { python } from "@codemirror/lang-python";
-import { dracula } from "@uiw/codemirror-theme-dracula";
-import "../styles/CodeCorrector.css";
-
-// Add dummy code examples
-const dummyCode = {
-  javascript: `// Example code with style and syntax issues
-var x=1
-let y =2;
-const z= 3
-
-function hello(name){
-return"Hello "+name
-}
-
-if(x==y){
-console.log('Equal')
-}`,
-  python: `# Example code with style and syntax issues
-def calculate_sum( a,b ):
- return a+b
-
-x=1
-y =2
-z= 3
-
-if x==y:
-print('Equal')
-
-def hello( name ):
- return 'Hello '+name`,
-};
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import BackToTop from './BackToTop';
+import '../styles/CodeCorrector.css';
 
 const CodeCorrector = () => {
   const location = useLocation();
@@ -131,6 +96,7 @@ const CodeCorrector = () => {
 
   return (
     <div className="code-corrector-container">
+      <BackToTop />
       <Link to="/" className="back-button">
         <span>←</span> Back to Home
       </Link>

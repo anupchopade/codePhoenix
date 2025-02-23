@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import BackToTop from './BackToTop';
 import '../styles/Refactoring.css';
 
 const Refactoring = () => {
@@ -60,6 +61,7 @@ const Refactoring = () => {
 
   return (
     <div className="refactoring-container">
+      <BackToTop />
       <Link to="/" className="back-button">
         <span>←</span> Back to Home
       </Link>

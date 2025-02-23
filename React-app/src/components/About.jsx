@@ -1,4 +1,5 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import BackToTop from './BackToTop';
 import '../styles/About.css';
 
 const About = () => {
@@ -31,6 +32,7 @@ const About = () => {
 
   return (
     <div className="about-container">
+      <BackToTop />
       <div 
         ref={titleRef}
         className={`about-header fade-in-up ${titleVisible ? 'visible' : ''}`}
@@ -85,11 +87,15 @@ const About = () => {
         <div className="about-section">
           <h2>Technology</h2>
           <p>
-            Built with cutting-edge web technologies including React, Node.js, and advanced code 
-            parsing algorithms. Our platform provides real-time code analysis, intelligent syntax 
-            transformation, and automated error correction, all wrapped in a beautiful, 
-            user-friendly interface.
+            Powered by a modern full-stack architecture utilizing React 18 with Vite for blazing-fast development and optimized builds. Our frontend leverages Material-UI components, CodeMirror for advanced code editing, and React Router for seamless navigation. The backend is built on Node.js with Express, featuring:
           </p>
+          <ul className="tech-list">
+            <li><strong>Code Processing:</strong> Babel's AST manipulation (@babel/parser, @babel/traverse) for precise JavaScript transformation</li>
+            <li><strong>Performance:</strong> Redis caching layer for optimized code processing and real-time analysis</li>
+            <li><strong>Code Quality:</strong> Integrated ESLint and Prettier for maintaining consistent code standards</li>
+            <li><strong>State Management:</strong> React's Context API with hooks for efficient state handling</li>
+            <li><strong>Real-time Updates:</strong> WebSocket integration for live code previews and instant feedback</li>
+          </ul>
         </div>
 
         <div className="about-section">
