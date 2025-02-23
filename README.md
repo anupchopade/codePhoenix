@@ -71,7 +71,7 @@ CodePhoenix is a powerful web application that helps developers modernize their 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/codePhoenix.git
+   git clone https://github.com/anupchopade/codePhoenix.git
    cd codePhoenix
    ```
 
