@@ -65,6 +65,7 @@ CodePhoenix is a powerful web application that helps developers modernize their 
 - Docker and Docker Compose
 - Redis
 - Python 3.x (for Python transformations)
+- autopep8 (run `pip install autopep8` to install)
 
 ### Installation
 
@@ -111,18 +112,17 @@ CodePhoenix is a powerful web application that helps developers modernize their 
 
 ### Environment Variables
 
-Create `.env` files in both frontend and backend directories:
+Create `.env` files in backend directory:
 
-**Frontend (.env)**
-```env
-VITE_API_URL=http://localhost:5000
-```
+
 
 **Backend (.env)**
 ```env
 PORT=5000
-REDIS_URL=redis://localhost:6379
-NODE_ENV=development
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+NODE_ENV=development # development, production
 ```
 
 ## 🌟 Usage
@@ -180,7 +180,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [2to3](https://docs.python.org/3/library/2to3.html) for Python conversion
 - [ESLint](https://eslint.org/) for code analysis
 - [Prettier](https://prettier.io/) for code formatting
+- [autopep8](https://github.com/hhatto/autopep8) for Python code formatting
 
 ---
 
-Made with ❤️ by Your Team
+Made with ❤️ 
