@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Hero.css';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
@@ -10,6 +10,39 @@ function Hero() {
   const [titleRef, titleVisible] = useScrollAnimation(0.1);
   const [contentRef, contentVisible] = useScrollAnimation(0.2);
   const [codeRef, codeVisible] = useScrollAnimation(0.3);
+  const [isTypingOld, setIsTypingOld] = useState(false);
+  const [isTypingModern, setIsTypingModern] = useState(false);
+
+  useEffect(() => {
+    if (codeVisible) {
+      // Start typing old code immediately
+      setIsTypingOld(true);
+      
+      // Start typing modern code right after old code finishes (2.8 seconds)
+      setTimeout(() => {
+        setIsTypingModern(true);
+      }, 2800); // Matches exactly when the last line of old code finishes
+    }
+  }, [codeVisible]);
+
+  const oldCode = [
+    "// Old JavaScript",
+    "var calculateSum = function(arr) {",
+    "    var sum = 0;",
+    "    for(var i = 0; i < arr.length; i++) {",
+    "        sum += arr[i];",
+    "    }",
+    "    return sum;",
+    "}"
+  ];
+
+  const modernCode = [
+    "// Modern JavaScript",
+    "const calculateSum = (arr) => {",
+    "    return arr.reduce((sum, num) =>",
+    "        sum + num, 0);",
+    "}"
+  ];
 
   const handleMouseMove = (e, isModern) => {
     const card = e.currentTarget;
@@ -105,18 +138,22 @@ function Hero() {
               </div>
               <pre>
                 <code>
-                  {`// Old JavaScript
-var calculateSum = function(arr) {
-    var sum = 0;
-    for(var i = 0; i < arr.length; i++) {
-        sum += arr[i];
-    }
-    return sum;
-}`}
+                  {oldCode.map((line, index) => (
+                    <span 
+                      key={index}
+                      className={`code-line ${isTypingOld ? 'animate' : ''} ${
+                        index === oldCode.length - 1 ? 'last-line' : ''
+                      }`}
+                    >
+                      {line}
+                      {'\n'}
+                    </span>
+                  ))}
                 </code>
               </pre>
             </div>
           </div>
+          
           <div 
             className="gradient-border code-window modern"
             onMouseMove={(e) => handleMouseMove(e, true)}
@@ -131,11 +168,17 @@ var calculateSum = function(arr) {
               </div>
               <pre>
                 <code>
-                  {`// Modern JavaScript
-const calculateSum = (arr) => {
-    return arr.reduce((sum, num) => 
-        sum + num, 0);
-}`}
+                  {modernCode.map((line, index) => (
+                    <span 
+                      key={index}
+                      className={`code-line ${isTypingModern ? 'animate' : ''} ${
+                        index === modernCode.length - 1 ? 'last-line' : ''
+                      }`}
+                    >
+                      {line}
+                      {'\n'}
+                    </span>
+                  ))}
                 </code>
               </pre>
             </div>

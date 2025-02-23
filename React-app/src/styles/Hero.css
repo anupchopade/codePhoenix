@@ -145,6 +145,73 @@
   line-height: 1.6;
 }
 
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-right-color: transparent;
+  }
+}
+
+.code-content pre code {
+  display: block;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+
+.code-line {
+  display: block;
+  width: 0;
+  overflow: hidden;
+  white-space: pre;
+  animation: typing 0.4s steps(30, end) forwards;
+  animation-play-state: paused;
+}
+
+.code-line.animate {
+  animation-play-state: running;
+}
+
+/* Remove all cursor styles during typing */
+.code-line.animate {
+  border-right: none;
+}
+
+/* Keep cursor blinking only for the last line of each section */
+.code-line.last-line.animate {
+  border-right: 2px solid rgba(255, 255, 255, 0.7);
+  animation: typing 1s steps(30, end) forwards,
+             blink 1s step-end infinite;
+}
+
+/* Adjust timing for each line in old code */
+.code-window:not(.modern) .code-line:nth-child(1) { animation-delay: 0s; }
+.code-window:not(.modern) .code-line:nth-child(2) { animation-delay: 0.4s; }
+.code-window:not(.modern) .code-line:nth-child(3) { animation-delay: 0.8s; }
+.code-window:not(.modern) .code-line:nth-child(4) { animation-delay: 1.2s; }
+.code-window:not(.modern) .code-line:nth-child(5) { animation-delay: 1.6s; }
+.code-window:not(.modern) .code-line:nth-child(6) { animation-delay: 2.0s; }
+.code-window:not(.modern) .code-line:nth-child(7) { animation-delay: 2.4s; }
+
+/* Modern code starts immediately after old code's last line finishes */
+.code-window.modern .code-line:nth-child(1) { animation-delay: 2.8s; }
+.code-window.modern .code-line:nth-child(2) { animation-delay: 3.2s; }
+.code-window.modern .code-line:nth-child(3) { animation-delay: 3.6s; }
+.code-window.modern .code-line:nth-child(4) { animation-delay: 4.0s; }
+.code-window.modern .code-line:nth-child(5) { animation-delay: 4.4s; }
+
+/* Remove the finished state styles */
+.code-line.animate.finished {
+  width: 100%;
+}
+
 @media (max-width: 1024px) {
   .hero {
     flex-direction: column;

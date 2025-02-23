@@ -1,0 +1,542 @@
+.refactor-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--refactor-background);
+  position: relative;
+  width: 100%;
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.refactor-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(112, 0, 255, 0.2) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(255, 61, 0, 0.15) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(112, 0, 255, 0.15) 0%,
+      transparent 70%
+    );
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(120px);
+}
+
+.back-button {
+  position: absolute;
+  top: 5.5rem;
+  left: 1.5rem;
+  color: var(--text-color);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.back-button:hover {
+  transform: translateX(-5px);
+  background: rgba(112, 0, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.back-button .gradient-text {
+  font-size: 1.5rem;
+}
+
+.gradient-text {
+  background: var(--refactor-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  position: relative;
+}
+
+.gradient-text::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--refactor-gradient);
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.gradient-text:hover::after {
+  opacity: 0.3;
+}
+
+.refactor-title {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 3rem auto 2.5rem;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.code-container {
+  display: flex;
+  width: 95%;
+  max-width: 1800px;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  gap: 2rem;
+  padding: 0;
+  margin: 0 auto 2rem;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.code-section {
+  flex: 1;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.code-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: 24px;
+}
+
+.code-section:hover::before {
+  opacity: 1;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 1;
+}
+
+.section-header h2 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e0e0e0;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.window-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.window-controls span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.window-controls span:nth-child(1) {
+  background: #ff5f56;
+}
+
+.window-controls span:nth-child(2) {
+  background: #ffbd2e;
+}
+
+.window-controls span:nth-child(3) {
+  background: #27c93f;
+}
+
+.code-editor-wrapper {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  height: 600px;
+  min-height: 600px;
+  overflow: auto;
+  padding: 0.5rem;
+}
+
+.code-editor {
+  height: 100% !important;
+  font-size: 14px !important;
+  background: transparent !important;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.5rem 0;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.primary-button {
+  background: var(--refactor-gradient);
+  border: none;
+  color: var(--refactor-text);
+  padding: 0.85rem 2.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.primary-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--refactor-glass);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.primary-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.primary-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3);
+}
+
+.primary-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.primary-button.loading {
+  background: linear-gradient(135deg, #444 0%, #666 100%);
+}
+
+.secondary-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.icon-button {
+  color: #e0e0e0 !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 8px !important;
+  padding: 0.75rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.icon-button:hover:not(:disabled) {
+  background: rgba(112, 0, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px);
+}
+
+.icon-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.details-section {
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  overflow: visible;
+}
+
+.details-section h2 {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.details-group {
+  margin-bottom: 2rem;
+}
+
+.details-group h3 {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.changes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.changes-list li {
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.code-diff {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  font-family: monospace;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.removed-code {
+  color: #ff5f56;
+  margin-bottom: 4px;
+}
+
+.added-code {
+  color: #27c93f;
+}
+
+.diff-view {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  overflow-x: auto;
+}
+
+.diff-line {
+  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.diff-line.added {
+  color: #27c93f;
+}
+
+.diff-line.removed {
+  color: #ff5f56;
+}
+
+.tool-info {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+}
+
+/* CodeMirror Overrides */
+.cm-editor {
+  height: 100% !important;
+  background: transparent !important;
+}
+
+.cm-scroller {
+  padding: 1rem !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .refactor-container {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .code-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .code-section {
+    max-width: 100%;
+  }
+
+  .code-editor-wrapper {
+    height: 400px;
+    min-height: 400px;
+  }
+
+  .details-section {
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+  }
+
+  .refactor-title {
+    font-size: 2.5rem;
+    margin: 1.5rem auto;
+  }
+
+  .action-buttons {
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .primary-button {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .secondary-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Enhanced animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.code-section {
+  animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  opacity: 0;
+}
+
+.input-section {
+  animation-delay: 0.2s;
+}
+
+.output-section {
+  animation-delay: 0.4s;
+}
+
+/* Add CSS variables for theme colors */
+:root {
+  --background-color: #0a0a0a;
+  --text-color: #e0e0e0;
+  --primary-gradient: linear-gradient(135deg, #7000ff 0%, #ff3d00 100%);
+  --secondary-gradient: linear-gradient(
+    135deg,
+    #fff 0%,
+    rgba(255, 255, 255, 0.8) 100%
+  );
+  --refactor-primary: #7000FF;
+  --refactor-secondary: #FF3D00;
+  --refactor-background: #030014;
+  --refactor-text: #ffffff;
+  --refactor-card-bg: rgba(0, 0, 0, 0.2);
+  --refactor-border: rgba(255, 255, 255, 0.03);
+  --refactor-gradient: linear-gradient(135deg, #7000FF 0%, #FF3D00 100%);
+  --refactor-glass: rgba(255, 255, 255, 0.05);
+}
+
+/* Reset styles for Refactor pages */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--refactor-background);
+  color: var(--refactor-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for Refactor pages */
+.refactor-container ::-webkit-scrollbar {
+  width: 10px;
+}
+
+.refactor-container ::-webkit-scrollbar-track {
+  background: var(--refactor-background);
+}
+
+.refactor-container ::-webkit-scrollbar-thumb {
+  background: var(--refactor-primary);
+  border-radius: 5px;
+}
+
+.refactor-container ::-webkit-scrollbar-thumb:hover {
+  background: var(--refactor-secondary);
+}

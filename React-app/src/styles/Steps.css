@@ -23,7 +23,7 @@
 
 .steps-title {
   text-align: center;
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 800;
   margin-bottom: 4rem;
   position: relative;
@@ -149,7 +149,7 @@
   }
 
   .steps-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
   }
 
   .steps-container {
