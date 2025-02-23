@@ -59,6 +59,90 @@
 .hero-buttons {
   display: flex;
   gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  color: white;
+  min-width: 250px;
+}
+
+.feature-button:hover {
+  transform: translateY(-2px);
+  background: rgba(112, 0, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(112, 0, 255, 0.15);
+}
+
+.feature-button.refactor {
+  background: linear-gradient(135deg, rgba(112, 0, 255, 0.1) 0%, rgba(255, 61, 0, 0.1) 100%);
+}
+
+.feature-button.corrector {
+  background: linear-gradient(135deg, rgba(255, 61, 0, 0.1) 0%, rgba(112, 0, 255, 0.1) 100%);
+}
+
+.button-icon {
+  font-size: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.feature-button:hover .button-icon {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.button-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.button-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.button-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.secondary-action {
+  display: flex;
+  justify-content: center;
+}
+
+.secondary-button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondary-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .hero-image {
@@ -187,7 +271,7 @@
 /* Keep cursor blinking only for the last line of each section */
 .code-line.last-line.animate {
   border-right: 2px solid rgba(255, 255, 255, 0.7);
-  animation: typing 1s steps(30, end) forwards,
+  animation: typing 0.4s steps(30, end) forwards,
              blink 1s step-end infinite;
 }
 
@@ -200,12 +284,12 @@
 .code-window:not(.modern) .code-line:nth-child(6) { animation-delay: 2.0s; }
 .code-window:not(.modern) .code-line:nth-child(7) { animation-delay: 2.4s; }
 
-/* Modern code starts immediately after old code's last line finishes */
-.code-window.modern .code-line:nth-child(1) { animation-delay: 2.8s; }
-.code-window.modern .code-line:nth-child(2) { animation-delay: 3.2s; }
-.code-window.modern .code-line:nth-child(3) { animation-delay: 3.6s; }
-.code-window.modern .code-line:nth-child(4) { animation-delay: 4.0s; }
-.code-window.modern .code-line:nth-child(5) { animation-delay: 4.4s; }
+/* Modern code starts right after old code */
+.code-window.modern .code-line:nth-child(1) { animation-delay: 2.4s; }
+.code-window.modern .code-line:nth-child(2) { animation-delay: 2.8s; }
+.code-window.modern .code-line:nth-child(3) { animation-delay: 3.2s; }
+.code-window.modern .code-line:nth-child(4) { animation-delay: 3.6s; }
+.code-window.modern .code-line:nth-child(5) { animation-delay: 4.0s; }
 
 /* Remove the finished state styles */
 .code-line.animate.finished {
@@ -220,6 +304,12 @@
   }
 
   .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .feature-button {
+    width: 100%;
     justify-content: center;
   }
 

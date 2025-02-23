@@ -1,26 +1,100 @@
-.features {
-  padding: 0 10% 8rem;
+.about-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--refactor-background);
+  position: relative;
+  width: 100%;
+  margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.about-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(112, 0, 255, 0.2) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(255, 61, 0, 0.15) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(112, 0, 255, 0.15) 0%,
+      transparent 70%
+    );
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(120px);
+}
+
+.about-header {
+  text-align: center;
+  padding: 4rem 0;
   position: relative;
   z-index: 1;
 }
 
-.features-title {
-  text-align: center;
+.about-header h1 {
   font-size: 4rem;
   font-weight: 800;
-  margin-bottom: 5rem;
+  margin-bottom: 1rem;
   letter-spacing: -0.04em;
-  position: relative;
-  z-index: 1;
+  color: white;
 }
 
-.features-title .gradient-text {
+.about-header .gradient-text {
   background: var(--accent-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  display: inline-block;
-  filter: drop-shadow(0 0 20px rgba(112, 0, 255, 0.2));
+}
+
+.about-header .subtitle {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.about-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.about-section {
+  margin-bottom: 4rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.about-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.about-section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .features-grid {
@@ -28,27 +102,9 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 3rem;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 4rem auto;
   position: relative;
   z-index: 1;
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(112, 0, 255, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(255, 61, 0, 0.2);
-  }
-}
-
-@keyframes float-icon {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
 }
 
 .feature-card {
@@ -146,61 +202,50 @@
   line-height: 1.7;
 }
 
-.feature-button {
-  margin-top: 2rem;
-  background: transparent;
-  border: 1px solid var(--accent-color, var(--primary-color));
-  color: var(--accent-color, var(--primary-color));
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(112, 0, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 61, 0, 0.2);
+  }
 }
 
-.feature-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--accent-gradient);
+@keyframes float-icon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.fade-in-up {
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
 }
 
-.feature-button:hover {
-  color: white;
-  border-color: transparent;
-}
-
-.feature-button:hover::before {
+.fade-in-up.visible {
   opacity: 1;
+  transform: translateY(0);
 }
 
-.feature-button span {
-  position: relative;
-  z-index: 1;
-}
-
-.feature-card.highlight {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-}
-
-@media (max-width: 1024px) {
-  .features {
-    padding: 6rem 2rem;
+@media (max-width: 768px) {
+  .about-header h1 {
+    font-size: 3rem;
   }
 
-  .features-title {
-    font-size: 3rem;
-    margin-bottom: 4rem;
+  .about-header .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .about-section {
+    padding: 1.5rem;
+  }
+
+  .about-section h2 {
+    font-size: 1.8rem;
   }
 
   .features-grid {

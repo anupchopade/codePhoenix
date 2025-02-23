@@ -1,27 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import '../styles/Hero.css';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 function Hero() {
-  const navigate = useNavigate();
   const [tiltStyle, setTiltStyle] = useState({});
   const [tiltStyleModern, setTiltStyleModern] = useState({});
   const [titleRef, titleVisible] = useScrollAnimation(0.1);
   const [contentRef, contentVisible] = useScrollAnimation(0.2);
   const [codeRef, codeVisible] = useScrollAnimation(0.3);
-  const [isTypingOld, setIsTypingOld] = useState(false);
-  const [isTypingModern, setIsTypingModern] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
     if (codeVisible) {
-      // Start typing old code immediately
-      setIsTypingOld(true);
-      
-      // Start typing modern code right after old code finishes (2.8 seconds)
-      setTimeout(() => {
-        setIsTypingModern(true);
-      }, 2800); // Matches exactly when the last line of old code finishes
+      // Start both animations immediately
+      setIsTyping(true);
     }
   }, [codeVisible]);
 
@@ -85,10 +77,34 @@ function Hero() {
     }
   };
 
-  const handleGetStarted = () => {
+  const navigateToRefactor = () => {
     const featuresSection = document.getElementById('features');
     if (featuresSection) {
       featuresSection.scrollIntoView({ behavior: 'smooth' });
+      // Add a class to highlight refactoring cards
+      document.querySelectorAll('.feature-card').forEach(card => {
+        if (card.querySelector('h3').textContent.includes('Refactoring')) {
+          card.classList.add('highlight');
+        } else {
+          card.classList.remove('highlight');
+        }
+      });
+    }
+  };
+
+  const navigateToCorrector = () => {
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+      // Add a class to highlight corrector cards
+      document.querySelectorAll('.feature-card').forEach(card => {
+        const title = card.querySelector('h3').textContent;
+        if (title.includes('Corrector')) {
+          card.classList.add('highlight');
+        } else {
+          card.classList.remove('highlight');
+        }
+      });
     }
   };
 
@@ -113,9 +129,26 @@ function Hero() {
             Transform legacy code into modern, efficient syntax with our intelligent refactoring tools
           </p>
           <div className="hero-buttons">
-            <button className="primary-button" onClick={handleGetStarted}>Start Refactoring</button>
-            <button className="secondary-button">Learn More</button>
+            <button className="feature-button refactor" onClick={navigateToRefactor}>
+              <span className="button-icon">🔄</span>
+              <span className="button-text">
+                <span className="button-title">Code Refactoring</span>
+                <span className="button-desc">Modernize your JavaScript code</span>
+              </span>
+            </button>
+            <button className="feature-button corrector" onClick={navigateToCorrector}>
+              <span className="button-icon">✨</span>
+              <span className="button-text">
+                <span className="button-title">Code Corrector</span>
+                <span className="button-desc">Fix syntax and style issues</span>
+              </span>
+            </button>
           </div>
+          {/* <div className="secondary-action">
+            <button className="secondary-button" onClick={handleGetStarted}>
+              Learn More
+            </button>
+          </div> */}
         </div>
       </div>
       <div 
@@ -141,7 +174,7 @@ function Hero() {
                   {oldCode.map((line, index) => (
                     <span 
                       key={index}
-                      className={`code-line ${isTypingOld ? 'animate' : ''} ${
+                      className={`code-line ${isTyping ? 'animate' : ''} ${
                         index === oldCode.length - 1 ? 'last-line' : ''
                       }`}
                     >
@@ -171,7 +204,7 @@ function Hero() {
                   {modernCode.map((line, index) => (
                     <span 
                       key={index}
-                      className={`code-line ${isTypingModern ? 'animate' : ''} ${
+                      className={`code-line ${isTyping ? 'animate' : ''} ${
                         index === modernCode.length - 1 ? 'last-line' : ''
                       }`}
                     >

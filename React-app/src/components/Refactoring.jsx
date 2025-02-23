@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import '../styles/CodeCorrector.css';
+import { toast } from 'react-toastify';
+import '../styles/Refactoring.css';
 
-const CodeCorrector = () => {
+const Refactoring = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [inputCode, setInputCode] = useState('');
   const [outputCode, setOutputCode] = useState('');
   const [language, setLanguage] = useState(location.state?.language || 'javascript');
   const [loading, setLoading] = useState(false);
-  const [corrections, setCorrections] = useState(null);
 
   useEffect(() => {
-    // Update language when state changes
     if (location.state?.language) {
       setLanguage(location.state.language);
     }
@@ -21,23 +19,20 @@ const CodeCorrector = () => {
 
   const handleLanguageChange = (newLanguage) => {
     setLanguage(newLanguage);
-    // Update URL state
-    navigate('/code-corrector', { state: { language: newLanguage }, replace: true });
-    // Reset form
+    navigate('/refactoring', { state: { language: newLanguage }, replace: true });
     setInputCode('');
     setOutputCode('');
-    setCorrections(null);
   };
 
-  const handleCorrect = async () => {
+  const handleRefactor = async () => {
     if (!inputCode.trim()) {
-      toast.error('Please enter some code to correct');
+      toast.error('Please enter some code to refactor');
       return;
     }
 
     setLoading(true);
     try {
-      const response = await fetch('/api/correct', {
+      const response = await fetch('/api/refactor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,12 +46,11 @@ const CodeCorrector = () => {
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to correct code');
+        throw new Error(data.error || 'Failed to refactor code');
       }
 
-      setOutputCode(data.corrected);
-      setCorrections(data.corrections);
-      toast.success('Code corrected successfully!');
+      setOutputCode(data.refactored);
+      toast.success('Code refactored successfully!');
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -65,13 +59,13 @@ const CodeCorrector = () => {
   };
 
   return (
-    <div className="code-corrector-container">
+    <div className="refactoring-container">
       <Link to="/" className="back-button">
         <span>←</span> Back to Home
       </Link>
 
-      <h1 className="corrector-title">
-        {language === 'javascript' ? 'JavaScript' : 'Python'} <span className="gradient-text">Corrector</span>
+      <h1 className="refactoring-title">
+        {language === 'javascript' ? 'JavaScript' : 'Python'} <span className="gradient-text">Refactoring</span>
       </h1>
       
       <div className="language-selector">
@@ -92,7 +86,7 @@ const CodeCorrector = () => {
       <div className="code-container">
         <div className="code-section">
           <div className="section-header">
-            <h2>Input Code</h2>
+            <h2>Original Code</h2>
             <div className="window-controls">
               <span></span>
               <span></span>
@@ -112,7 +106,7 @@ const CodeCorrector = () => {
 
         <div className="code-section">
           <div className="section-header">
-            <h2>Corrected Code</h2>
+            <h2>Refactored Code</h2>
             <div className="window-controls">
               <span></span>
               <span></span>
@@ -123,7 +117,7 @@ const CodeCorrector = () => {
             <textarea
               value={outputCode}
               readOnly
-              placeholder="Your corrected code will appear here..."
+              placeholder="Your refactored code will appear here..."
               className="code-editor"
               spellCheck="false"
             />
@@ -134,46 +128,14 @@ const CodeCorrector = () => {
       <div className="action-buttons">
         <button
           className={`primary-button ${loading ? 'loading' : ''}`}
-          onClick={handleCorrect}
+          onClick={handleRefactor}
           disabled={loading}
         >
-          {loading ? 'Correcting...' : 'Correct Code'}
+          {loading ? 'Refactoring...' : 'Refactor Code'}
         </button>
       </div>
-
-      {corrections && (
-        <div className="corrections-summary">
-          <h3>Corrections Summary</h3>
-          <div className="corrections-grid">
-            <div className="correction-item">
-              <span className="correction-label">Syntax Fixes</span>
-              <span className={`correction-value ${corrections.syntaxFixed ? 'active' : ''}`}>
-                {corrections.syntaxFixed ? 'Applied' : 'None needed'}
-              </span>
-            </div>
-            <div className="correction-item">
-              <span className="correction-label">Style Improvements</span>
-              <span className={`correction-value ${corrections.styleFixed ? 'active' : ''}`}>
-                {corrections.styleFixed ? 'Applied' : 'None needed'}
-              </span>
-            </div>
-            {corrections.potentialRuntimeIssues?.length > 0 && (
-              <div className="correction-item warnings">
-                <span className="correction-label">Potential Issues</span>
-                <ul className="issues-list">
-                  {corrections.potentialRuntimeIssues.map((issue, index) => (
-                    <li key={index}>
-                      Line {issue.line}: {issue.message}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default CodeCorrector; 
+export default Refactoring; 
