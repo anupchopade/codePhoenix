@@ -133,7 +133,7 @@ function Hero() {
               <span className="button-icon">🔄</span>
               <span className="button-text">
                 <span className="button-title">Code Refactoring</span>
-                <span className="button-desc">Modernize your JavaScript code</span>
+                <span className="button-desc">Modernize your legacy code</span>
               </span>
             </button>
             <button className="feature-button corrector" onClick={navigateToCorrector}>

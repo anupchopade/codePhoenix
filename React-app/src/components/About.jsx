@@ -85,18 +85,19 @@ const About = () => {
         </div>
 
         <div className="about-section">
-          <h2>Technology</h2>
-          <p>
-            Powered by a modern full-stack architecture utilizing React 18 with Vite for blazing-fast development and optimized builds. Our frontend leverages Material-UI components, CodeMirror for advanced code editing, and React Router for seamless navigation. The backend is built on Node.js with Express, featuring:
-          </p>
-          <ul className="tech-list">
-            <li><strong>Code Processing:</strong> Babel's AST manipulation (@babel/parser, @babel/traverse) for precise JavaScript transformation</li>
-            <li><strong>Performance:</strong> Redis caching layer for optimized code processing and real-time analysis</li>
-            <li><strong>Code Quality:</strong> Integrated ESLint and Prettier for maintaining consistent code standards</li>
-            <li><strong>State Management:</strong> React's Context API with hooks for efficient state handling</li>
-            <li><strong>Real-time Updates:</strong> WebSocket integration for live code previews and instant feedback</li>
-          </ul>
-        </div>
+  <h2>Technology</h2>
+  <p>
+    Powered by a modern full-stack architecture utilizing React with Vite for fast development and optimized builds. 
+    Our frontend is built with React and the backend runs on Node.js with Express, featuring:
+  </p>
+  <ul className="tech-list">
+    <li><strong>Code Refactoring:</strong> Babel's AST manipulation (@babel/parser, @babel/traverse) for JavaScript transformation and 2to3 for Python modernization</li>
+    <li><strong>Code Correction:</strong> ESLint and Prettier for JavaScript, Autopep8 for Python</li>
+    <li><strong>Performance:</strong> Redis for handling simultaneous requests efficiently</li>
+    <li><strong>State Management:</strong> React's Context API with hooks for efficient state handling</li>
+  </ul>
+</div>
+
 
         <div className="about-section">
           <h2>Get Started</h2>
